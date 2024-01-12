@@ -1,5 +1,5 @@
 ---
-title: Linux 指令 Notes
+title: linux
 subtitle:
 date: 2024-01-12T12:31:42+08:00
 slug: 583bc6c
