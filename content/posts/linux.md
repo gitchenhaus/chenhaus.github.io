@@ -1,9 +1,9 @@
 ---
-title: linux
+title: linux notes
 subtitle:
 date: 2024-01-12T12:31:42+08:00
 slug: 583bc6c
-draft: true
+draft: false
 author:
   name:
   link:
