@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>linux notes - ChenHaus Site</title><meta name="author" content="">
+<meta name="author-link" content="">
+<meta name="description" content="
+  Introduction
+  netstat -tulpn顯示所有正在使用的連接和相關的程式名稱，並顯示在哪個埠口正在監聽。-t 表示顯示 TCP 連接，-u 表示顯示 UDP 連接，-l 表示顯示正在監聽的連接，-p 表示顯示相關的程式名稱，-n 表示以數字格式顯示端口和地址。
+
+  netstat -an顯示所有正在使用的連接，包括 IP 地址和端口號，但不顯示相關的程式名稱。-a 表示顯示所有連接，-n 表示以數字格式顯示端口和地址。
+
+  nslookup -type=ns example.com使用 DNS 查詢獲取指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig example.com NS使用 dig 工具查詢指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig &#43;cdflag @8.8.8.8 haway.xyz a &#43;short使用 dig 工具查詢指定 DNS 伺服器（8.8.8.8）上 &ldquo;haway.xyz&rdquo; 的 A（IPv4）紀錄。&#43;cdflag 表示不要進行 DNSSEC 驗證，&#43;short 表示只顯示 IP 地址。
+
+  dig &#43;tcp &#43;short blog.rsync.tw a使用 dig 工具通過 TCP 協議查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，同時只顯示 IP 地址。
+
+  dig rsync.tw mx使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 MX（Mail Exchange）紀錄，顯示郵件伺服器的信息。
+
+  dig rsync.tw soa使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 SOA（Start of Authority）紀錄，顯示主權區的相關信息。
+
+  dig -x 8.8.8.8 ptr使用 dig 工具查詢指定 IP 地址（8.8.8.8）的 PTR（Pointer）紀錄，顯示逆向 DNS 查詢的結果。
+
+  dig &#43;trace blog.rsync.tw a使用 dig 工具以追踪模式查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，顯示 DNS 查詢的過程。
+
+  telnet ip_address port_number使用 telnet 工具建立到指定 IP 地址和端口號的 TCP 連接，用於測試網絡連通性。
+
+  nc -vz amazon.com 80使用 nc（netcat）工具測試到指定主機（amazon.com）的指定端口（80）是否可連接。-v 表示詳細模式，-z 表示僅檢查連接是否成功。
+
+  nmap -p &lt;port_number&gt; &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的指定端口號，顯示端口的狀態。可以使用 &lt;port_number&gt; 和 &lt;ip_address&gt; 替換實際的端口號和 IP 地址。
+
+  nmap -p 1-100 &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的端口範圍（1 到 100），顯示端口的狀態。
+
+  ulimit -n顯示用戶進程的文件描述符限制數量。
+
+  ulimit -nH顯示用戶進程的文件描述符硬限制數量。
+
+  /etc/sysctl.conf這是一個配置文件，包含有關系統內核參數的配置。你可以使用這個文件調整系統的各種參數。
+
+  cat /proc/sys/fs/file-max顯示系統內核中的文件描述符上限。
+
+  du -hc &ndash;max-depth=0顯示當前目錄的總大小，--max-depth=0 表示僅顯示當前目錄而不深入子目錄。
+
+  sudo du -h -d 1 | sort -h使用 sudo 權限顯示當前目錄中的所有子目錄的大小，按大小排序。" /><meta name="keywords" content='linux' /><meta itemprop="name" content="linux notes">
+<meta itemprop="description" content="
+  Introduction
+  netstat -tulpn顯示所有正在使用的連接和相關的程式名稱，並顯示在哪個埠口正在監聽。-t 表示顯示 TCP 連接，-u 表示顯示 UDP 連接，-l 表示顯示正在監聽的連接，-p 表示顯示相關的程式名稱，-n 表示以數字格式顯示端口和地址。
+
+  netstat -an顯示所有正在使用的連接，包括 IP 地址和端口號，但不顯示相關的程式名稱。-a 表示顯示所有連接，-n 表示以數字格式顯示端口和地址。
+
+  nslookup -type=ns example.com使用 DNS 查詢獲取指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig example.com NS使用 dig 工具查詢指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig &#43;cdflag @8.8.8.8 haway.xyz a &#43;short使用 dig 工具查詢指定 DNS 伺服器（8.8.8.8）上 &ldquo;haway.xyz&rdquo; 的 A（IPv4）紀錄。&#43;cdflag 表示不要進行 DNSSEC 驗證，&#43;short 表示只顯示 IP 地址。
+
+  dig &#43;tcp &#43;short blog.rsync.tw a使用 dig 工具通過 TCP 協議查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，同時只顯示 IP 地址。
+
+  dig rsync.tw mx使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 MX（Mail Exchange）紀錄，顯示郵件伺服器的信息。
+
+  dig rsync.tw soa使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 SOA（Start of Authority）紀錄，顯示主權區的相關信息。
+
+  dig -x 8.8.8.8 ptr使用 dig 工具查詢指定 IP 地址（8.8.8.8）的 PTR（Pointer）紀錄，顯示逆向 DNS 查詢的結果。
+
+  dig &#43;trace blog.rsync.tw a使用 dig 工具以追踪模式查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，顯示 DNS 查詢的過程。
+
+  telnet ip_address port_number使用 telnet 工具建立到指定 IP 地址和端口號的 TCP 連接，用於測試網絡連通性。
+
+  nc -vz amazon.com 80使用 nc（netcat）工具測試到指定主機（amazon.com）的指定端口（80）是否可連接。-v 表示詳細模式，-z 表示僅檢查連接是否成功。
+
+  nmap -p &lt;port_number&gt; &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的指定端口號，顯示端口的狀態。可以使用 &lt;port_number&gt; 和 &lt;ip_address&gt; 替換實際的端口號和 IP 地址。
+
+  nmap -p 1-100 &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的端口範圍（1 到 100），顯示端口的狀態。
+
+  ulimit -n顯示用戶進程的文件描述符限制數量。
+
+  ulimit -nH顯示用戶進程的文件描述符硬限制數量。
+
+  /etc/sysctl.conf這是一個配置文件，包含有關系統內核參數的配置。你可以使用這個文件調整系統的各種參數。
+
+  cat /proc/sys/fs/file-max顯示系統內核中的文件描述符上限。
+
+  du -hc &ndash;max-depth=0顯示當前目錄的總大小，--max-depth=0 表示僅顯示當前目錄而不深入子目錄。
+
+  sudo du -h -d 1 | sort -h使用 sudo 權限顯示當前目錄中的所有子目錄的大小，按大小排序。"><meta itemprop="datePublished" content="2024-01-12T12:31:42+08:00" />
+<meta itemprop="dateModified" content="2024-01-12T12:31:42+08:00" />
+<meta itemprop="wordCount" content="177">
+<meta itemprop="keywords" content="linux," /><meta property="og:title" content="linux notes" />
+<meta property="og:description" content="
+  Introduction
+  netstat -tulpn顯示所有正在使用的連接和相關的程式名稱，並顯示在哪個埠口正在監聽。-t 表示顯示 TCP 連接，-u 表示顯示 UDP 連接，-l 表示顯示正在監聽的連接，-p 表示顯示相關的程式名稱，-n 表示以數字格式顯示端口和地址。
+
+  netstat -an顯示所有正在使用的連接，包括 IP 地址和端口號，但不顯示相關的程式名稱。-a 表示顯示所有連接，-n 表示以數字格式顯示端口和地址。
+
+  nslookup -type=ns example.com使用 DNS 查詢獲取指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig example.com NS使用 dig 工具查詢指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig &#43;cdflag @8.8.8.8 haway.xyz a &#43;short使用 dig 工具查詢指定 DNS 伺服器（8.8.8.8）上 &ldquo;haway.xyz&rdquo; 的 A（IPv4）紀錄。&#43;cdflag 表示不要進行 DNSSEC 驗證，&#43;short 表示只顯示 IP 地址。
+
+  dig &#43;tcp &#43;short blog.rsync.tw a使用 dig 工具通過 TCP 協議查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，同時只顯示 IP 地址。
+
+  dig rsync.tw mx使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 MX（Mail Exchange）紀錄，顯示郵件伺服器的信息。
+
+  dig rsync.tw soa使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 SOA（Start of Authority）紀錄，顯示主權區的相關信息。
+
+  dig -x 8.8.8.8 ptr使用 dig 工具查詢指定 IP 地址（8.8.8.8）的 PTR（Pointer）紀錄，顯示逆向 DNS 查詢的結果。
+
+  dig &#43;trace blog.rsync.tw a使用 dig 工具以追踪模式查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，顯示 DNS 查詢的過程。
+
+  telnet ip_address port_number使用 telnet 工具建立到指定 IP 地址和端口號的 TCP 連接，用於測試網絡連通性。
+
+  nc -vz amazon.com 80使用 nc（netcat）工具測試到指定主機（amazon.com）的指定端口（80）是否可連接。-v 表示詳細模式，-z 表示僅檢查連接是否成功。
+
+  nmap -p &lt;port_number&gt; &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的指定端口號，顯示端口的狀態。可以使用 &lt;port_number&gt; 和 &lt;ip_address&gt; 替換實際的端口號和 IP 地址。
+
+  nmap -p 1-100 &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的端口範圍（1 到 100），顯示端口的狀態。
+
+  ulimit -n顯示用戶進程的文件描述符限制數量。
+
+  ulimit -nH顯示用戶進程的文件描述符硬限制數量。
+
+  /etc/sysctl.conf這是一個配置文件，包含有關系統內核參數的配置。你可以使用這個文件調整系統的各種參數。
+
+  cat /proc/sys/fs/file-max顯示系統內核中的文件描述符上限。
+
+  du -hc &ndash;max-depth=0顯示當前目錄的總大小，--max-depth=0 表示僅顯示當前目錄而不深入子目錄。
+
+  sudo du -h -d 1 | sort -h使用 sudo 權限顯示當前目錄中的所有子目錄的大小，按大小排序。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/posts/583bc6c/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-01-12T12:31:42+08:00" />
+<meta property="article:modified_time" content="2024-01-12T12:31:42+08:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="linux notes"/>
+<meta name="twitter:description" content="
+  Introduction
+  netstat -tulpn顯示所有正在使用的連接和相關的程式名稱，並顯示在哪個埠口正在監聽。-t 表示顯示 TCP 連接，-u 表示顯示 UDP 連接，-l 表示顯示正在監聽的連接，-p 表示顯示相關的程式名稱，-n 表示以數字格式顯示端口和地址。
+
+  netstat -an顯示所有正在使用的連接，包括 IP 地址和端口號，但不顯示相關的程式名稱。-a 表示顯示所有連接，-n 表示以數字格式顯示端口和地址。
+
+  nslookup -type=ns example.com使用 DNS 查詢獲取指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig example.com NS使用 dig 工具查詢指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。
+
+  dig &#43;cdflag @8.8.8.8 haway.xyz a &#43;short使用 dig 工具查詢指定 DNS 伺服器（8.8.8.8）上 &ldquo;haway.xyz&rdquo; 的 A（IPv4）紀錄。&#43;cdflag 表示不要進行 DNSSEC 驗證，&#43;short 表示只顯示 IP 地址。
+
+  dig &#43;tcp &#43;short blog.rsync.tw a使用 dig 工具通過 TCP 協議查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，同時只顯示 IP 地址。
+
+  dig rsync.tw mx使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 MX（Mail Exchange）紀錄，顯示郵件伺服器的信息。
+
+  dig rsync.tw soa使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 SOA（Start of Authority）紀錄，顯示主權區的相關信息。
+
+  dig -x 8.8.8.8 ptr使用 dig 工具查詢指定 IP 地址（8.8.8.8）的 PTR（Pointer）紀錄，顯示逆向 DNS 查詢的結果。
+
+  dig &#43;trace blog.rsync.tw a使用 dig 工具以追踪模式查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，顯示 DNS 查詢的過程。
+
+  telnet ip_address port_number使用 telnet 工具建立到指定 IP 地址和端口號的 TCP 連接，用於測試網絡連通性。
+
+  nc -vz amazon.com 80使用 nc（netcat）工具測試到指定主機（amazon.com）的指定端口（80）是否可連接。-v 表示詳細模式，-z 表示僅檢查連接是否成功。
+
+  nmap -p &lt;port_number&gt; &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的指定端口號，顯示端口的狀態。可以使用 &lt;port_number&gt; 和 &lt;ip_address&gt; 替換實際的端口號和 IP 地址。
+
+  nmap -p 1-100 &lt;ip_address&gt;使用 nmap 工具掃描指定 IP 地址上的端口範圍（1 到 100），顯示端口的狀態。
+
+  ulimit -n顯示用戶進程的文件描述符限制數量。
+
+  ulimit -nH顯示用戶進程的文件描述符硬限制數量。
+
+  /etc/sysctl.conf這是一個配置文件，包含有關系統內核參數的配置。你可以使用這個文件調整系統的各種參數。
+
+  cat /proc/sys/fs/file-max顯示系統內核中的文件描述符上限。
+
+  du -hc &ndash;max-depth=0顯示當前目錄的總大小，--max-depth=0 表示僅顯示當前目錄而不深入子目錄。
+
+  sudo du -h -d 1 | sort -h使用 sudo 權限顯示當前目錄中的所有子目錄的大小，按大小排序。"/>
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/posts/583bc6c/" /><link rel="next" href="http://localhost:1313/posts/3a72038/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "linux notes",
+    "inLanguage": "en-us",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/posts\/583bc6c\/"
+    },"genre": "posts","keywords": "linux","wordcount":  177 ,
+    "url": "http:\/\/localhost:1313\/posts\/583bc6c\/","datePublished": "2024-01-12T12:31:42+08:00","dateModified": "2024-01-12T12:31:42+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="ChenHaus Site"><span class="header-title-text">ChenHaus Site</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/archives/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="ChenHaus Site"><span class="header-title-text">ChenHaus Site</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/archives/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> Archives</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-folder-tree fa-fw fa-sm" aria-hidden="true"></i> Categories</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> Tags</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="Collections"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="Repost" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>linux notes</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><span class="author"><i class="fa-solid fa-user-circle" aria-hidden="true"></i>
+      </span></span><span class="post-included-in">&nbsp;included in <a href="/categories/devops/" class="post-category" title="Category - DevOps"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> DevOps</a></span></div><div class="post-meta-line"><span title="published on 2024-01-12 12:31:42"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-01-12">2024-01-12</time></span>&nbsp;<span title="177 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 200 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>One minute</span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a>
+      <ul>
+        <li><a href="#netstat--tulpn">netstat -tulpn</a></li>
+        <li><a href="#netstat--an">netstat -an</a></li>
+        <li><a href="#nslookup--typens-examplecom">nslookup -type=ns example.com</a></li>
+        <li><a href="#dig-examplecom-ns">dig example.com NS</a></li>
+        <li><a href="#dig-cdflag-8888-hawayxyz-a-short">dig +cdflag @8.8.8.8 haway.xyz a +short</a></li>
+        <li><a href="#dig-tcp-short-blogrsynctw-a">dig +tcp +short blog.rsync.tw a</a></li>
+        <li><a href="#dig-rsynctw-mx">dig rsync.tw mx</a></li>
+        <li><a href="#dig-rsynctw-soa">dig rsync.tw soa</a></li>
+        <li><a href="#dig--x-8888-ptr">dig -x 8.8.8.8 ptr</a></li>
+        <li><a href="#dig-trace-blogrsynctw-a">dig +trace blog.rsync.tw a</a></li>
+        <li><a href="#telnet-ip_address-port_number">telnet ip_address port_number</a></li>
+        <li><a href="#nc--vz-amazoncom-80">nc -vz amazon.com 80</a></li>
+        <li><a href="#nmap--p-port_number-ip_address">nmap -p &lt;port_number&gt; &lt;ip_address&gt;</a></li>
+        <li><a href="#nmap--p-1-100-ip_address">nmap -p 1-100 &lt;ip_address&gt;</a></li>
+        <li><a href="#ulimit--n">ulimit -n</a></li>
+        <li><a href="#ulimit--nh">ulimit -nH</a></li>
+        <li><a href="#etcsysctlconf">/etc/sysctl.conf</a></li>
+        <li><a href="#cat-procsysfsfile-max">cat /proc/sys/fs/file-max</a></li>
+        <li><a href="#du--hc---max-depth0">du -hc &ndash;max-depth=0</a></li>
+        <li><a href="#sudo-du--h--d-1--sort--h">sudo du -h -d 1 | sort -h</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h2 id="introduction" class="heading-element">
+  <a href="#introduction" class="heading-mark"></a>Introduction</h2><h3 id="netstat--tulpn" class="heading-element">
+  <a href="#netstat--tulpn" class="heading-mark"></a>netstat -tulpn</h3><p>顯示所有正在使用的連接和相關的程式名稱，並顯示在哪個埠口正在監聽。<code>-t</code> 表示顯示 TCP 連接，<code>-u</code> 表示顯示 UDP 連接，<code>-l</code> 表示顯示正在監聽的連接，<code>-p</code> 表示顯示相關的程式名稱，<code>-n</code> 表示以數字格式顯示端口和地址。</p>
+<h3 id="netstat--an" class="heading-element">
+  <a href="#netstat--an" class="heading-mark"></a>netstat -an</h3><p>顯示所有正在使用的連接，包括 IP 地址和端口號，但不顯示相關的程式名稱。<code>-a</code> 表示顯示所有連接，<code>-n</code> 表示以數字格式顯示端口和地址。</p>
+<h3 id="nslookup--typens-examplecom" class="heading-element">
+  <a href="#nslookup--typens-examplecom" class="heading-mark"></a>nslookup -type=ns example.com</h3><p>使用 DNS 查詢獲取指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。</p>
+<h3 id="dig-examplecom-ns" class="heading-element">
+  <a href="#dig-examplecom-ns" class="heading-mark"></a>dig example.com NS</h3><p>使用 dig 工具查詢指定域名的 NS（Name Server）紀錄。這條指令顯示了 &ldquo;example.com&rdquo; 的 Name Server 記錄。</p>
+<h3 id="dig-cdflag-8888-hawayxyz-a-short" class="heading-element">
+  <a href="#dig-cdflag-8888-hawayxyz-a-short" class="heading-mark"></a>dig +cdflag @8.8.8.8 haway.xyz a +short</h3><p>使用 dig 工具查詢指定 DNS 伺服器（8.8.8.8）上 &ldquo;haway.xyz&rdquo; 的 A（IPv4）紀錄。<code>+cdflag</code> 表示不要進行 DNSSEC 驗證，<code>+short</code> 表示只顯示 IP 地址。</p>
+<h3 id="dig-tcp-short-blogrsynctw-a" class="heading-element">
+  <a href="#dig-tcp-short-blogrsynctw-a" class="heading-mark"></a>dig +tcp +short blog.rsync.tw a</h3><p>使用 dig 工具通過 TCP 協議查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，同時只顯示 IP 地址。</p>
+<h3 id="dig-rsynctw-mx" class="heading-element">
+  <a href="#dig-rsynctw-mx" class="heading-mark"></a>dig rsync.tw mx</h3><p>使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 MX（Mail Exchange）紀錄，顯示郵件伺服器的信息。</p>
+<h3 id="dig-rsynctw-soa" class="heading-element">
+  <a href="#dig-rsynctw-soa" class="heading-mark"></a>dig rsync.tw soa</h3><p>使用 dig 工具查詢 &ldquo;rsync.tw&rdquo; 的 SOA（Start of Authority）紀錄，顯示主權區的相關信息。</p>
+<h3 id="dig--x-8888-ptr" class="heading-element">
+  <a href="#dig--x-8888-ptr" class="heading-mark"></a>dig -x 8.8.8.8 ptr</h3><p>使用 dig 工具查詢指定 IP 地址（8.8.8.8）的 PTR（Pointer）紀錄，顯示逆向 DNS 查詢的結果。</p>
+<h3 id="dig-trace-blogrsynctw-a" class="heading-element">
+  <a href="#dig-trace-blogrsynctw-a" class="heading-mark"></a>dig +trace blog.rsync.tw a</h3><p>使用 dig 工具以追踪模式查詢 &ldquo;blog.rsync.tw&rdquo; 的 A（IPv4）紀錄，顯示 DNS 查詢的過程。</p>
+<h3 id="telnet-ip_address-port_number" class="heading-element">
+  <a href="#telnet-ip_address-port_number" class="heading-mark"></a>telnet ip_address port_number</h3><p>使用 telnet 工具建立到指定 IP 地址和端口號的 TCP 連接，用於測試網絡連通性。</p>
+<h3 id="nc--vz-amazoncom-80" class="heading-element">
+  <a href="#nc--vz-amazoncom-80" class="heading-mark"></a>nc -vz amazon.com 80</h3><p>使用 nc（netcat）工具測試到指定主機（amazon.com）的指定端口（80）是否可連接。<code>-v</code> 表示詳細模式，<code>-z</code> 表示僅檢查連接是否成功。</p>
+<h3 id="nmap--p-port_number-ip_address" class="heading-element">
+  <a href="#nmap--p-port_number-ip_address" class="heading-mark"></a>nmap -p &lt;port_number&gt; &lt;ip_address&gt;</h3><p>使用 nmap 工具掃描指定 IP 地址上的指定端口號，顯示端口的狀態。可以使用 <code>&lt;port_number&gt;</code> 和 <code>&lt;ip_address&gt;</code> 替換實際的端口號和 IP 地址。</p>
+<h3 id="nmap--p-1-100-ip_address" class="heading-element">
+  <a href="#nmap--p-1-100-ip_address" class="heading-mark"></a>nmap -p 1-100 &lt;ip_address&gt;</h3><p>使用 nmap 工具掃描指定 IP 地址上的端口範圍（1 到 100），顯示端口的狀態。</p>
+<h3 id="ulimit--n" class="heading-element">
+  <a href="#ulimit--n" class="heading-mark"></a>ulimit -n</h3><p>顯示用戶進程的文件描述符限制數量。</p>
+<h3 id="ulimit--nh" class="heading-element">
+  <a href="#ulimit--nh" class="heading-mark"></a>ulimit -nH</h3><p>顯示用戶進程的文件描述符硬限制數量。</p>
+<h3 id="etcsysctlconf" class="heading-element">
+  <a href="#etcsysctlconf" class="heading-mark"></a>/etc/sysctl.conf</h3><p>這是一個配置文件，包含有關系統內核參數的配置。你可以使用這個文件調整系統的各種參數。</p>
+<h3 id="cat-procsysfsfile-max" class="heading-element">
+  <a href="#cat-procsysfsfile-max" class="heading-mark"></a>cat /proc/sys/fs/file-max</h3><p>顯示系統內核中的文件描述符上限。</p>
+<h3 id="du--hc---max-depth0" class="heading-element">
+  <a href="#du--hc---max-depth0" class="heading-mark"></a>du -hc &ndash;max-depth=0</h3><p>顯示當前目錄的總大小，<code>--max-depth=0</code> 表示僅顯示當前目錄而不深入子目錄。</p>
+<h3 id="sudo-du--h--d-1--sort--h" class="heading-element">
+  <a href="#sudo-du--h--d-1--sort--h" class="heading-mark"></a>sudo du -h -d 1 | sort -h</h3><p>使用 sudo 權限顯示當前目錄中的所有子目錄的大小，按大小排序。</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2024-01-12 12:31:42">Updated on 2024-01-12&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://localhost:1313/posts/583bc6c/" data-title="linux notes" data-hashtags="linux"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://localhost:1313/posts/583bc6c/" data-hashtag="linux"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://localhost:1313/posts/583bc6c/" data-title="linux notes"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/linux/" class="post-tag" title="Tags - Linux">Linux</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav">
+      <a href="/posts/3a72038/" class="post-nav-item" rel="next" title="面試紀錄">面試紀錄<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label="Contents"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">Powered by <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.124.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> | Theme - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.1"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="/"></a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

@@ -1,0 +1,28 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>面試 - Tag - ChenHaus Site</title>
+    <link>http://localhost:1313/tags/%E9%9D%A2%E8%A9%A6/</link>
+    <description>面試 - Tag | ChenHaus Site</description>
+    <generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 28 Mar 2024 22:52:51 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/%E9%9D%A2%E8%A9%A6/" rel="self" type="application/rss+xml" /><item>
+  <title>面試紀錄</title>
+  <link>http://localhost:1313/posts/3a72038/</link>
+  <pubDate>Thu, 28 Mar 2024 22:52:51 &#43;0800</pubDate>
+  <author>Author</author>
+  <guid>http://localhost:1313/posts/3a72038/</guid>
+  <description><![CDATA[<h2 id="introduction" class="heading-element">
+  <a href="#introduction" class="heading-mark"></a>Introduction</h2><p>在 ulimit 中，有兩個重要的限制值，分別是 &ldquo;soft&rdquo; 和 &ldquo;hard&rdquo; 限制。這兩者之間的差異在於其影響範圍和設定權限：</p>
+<ol>
+<li>Soft Limit（軟限制）：</li>
+</ol>
+<p>軟限制是關於資源限制的初始值，用戶或進程可以自行提高軟限制，但不能超過硬限制。
+用戶或進程可以通過 ulimit -S 命令提高軟限制。軟限制一般用於定義當前會話或進程的初始限制值。
+用戶或進程通常有權修改或提高自己的軟限制，但不能超過相對應的硬限制。</p>
+<ol start="2">
+<li>Hard Limit（硬限制）：</li>
+</ol>
+<p>硬限制是關於資源限制的最大允許值，它設定了軟限制的上限。硬限制通常由系統管理員設定，用戶或進程無法超過這個值。
+用戶或進程通常無權修改硬限制。只有系統管理員可以提高硬限制，以使其大於或等於軟限制。
+總之，軟限制是用戶或進程可以自行修改的初始限制值，而硬限制是這些軟限制的上限，只有系統管理員可以修改硬限制。這種設計允許用戶在合理的範圍內自行調整資源限制，同時確保系統管理員可以防止過度使用資源。</p>]]></description>
+</item>
+</channel>
+</rss>
